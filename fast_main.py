@@ -2,6 +2,7 @@ import pandas as pd
 from fast_score import get_score
 from tqdm import tqdm
 import os
+import datetime
 
 columns = [ 'University_Name',
             'Category',
@@ -39,7 +40,8 @@ if __name__ == "__main__":
     url_csv = 'schools_url.csv'
     df_university_url = pd.read_csv(url_csv)
 
-    filename = 'usnews.csv'
+    yyyy_mm = datetime.datetime.now().strftime("%Y-%m")
+    filename = os.path.join(f'usnews_{yyyy_mm}.csv')
     if not os.path.exists(filename):
         with open(filename, 'w') as f:
             f.write(','.join(columns) + '\n')
@@ -57,9 +59,9 @@ if __name__ == "__main__":
                 if not usnews[usnews['University_Name'] == school_name]['Rank'].isnull().any():
                     pbar.set_postfix_str("OK")
                     break
-            pbar.set_postfix_str("Scraping")
+            pbar.set_postfix_str(f"Scraping {school_name}")
             university_name, results = get_score(url)
-            if university_name == None or results == {}:
+            if university_name == None and results == {}:
                 pbar.set_postfix_str("Failed")
                 continue
             pbar.set_postfix_str("DataFraming")
@@ -69,6 +71,7 @@ if __name__ == "__main__":
             usnews.to_csv(filename, index=False, encoding='utf-8')
             pbar.set_postfix_str("Success")
             break
+    print('Finished !!')
         
         
     
