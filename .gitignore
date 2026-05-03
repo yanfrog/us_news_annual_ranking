@@ -13,3 +13,6 @@ us_venv/
 
 # data folder
 data/
+
+# json files
+*.json
