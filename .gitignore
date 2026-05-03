@@ -10,5 +10,6 @@ us_venv/
 # IDE settings
 .vscode/
 
-# Data files
-*.csv
+
+# data folder
+data/
